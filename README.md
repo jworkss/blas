@@ -2,7 +2,7 @@
 
 ## Información de la materia
 
-- **Universidad:** Universidad Nacional de Moreno
+- **Universidad:** Universidad Nacional de Moreno.
 - **Carrera:** Diseño multimedial
 - **Materia:** Taller de Diseño Multimedial 4 2026
 - **Alumnos:** Duarte Marcos, Aimee Meza y Abigail Rolón
