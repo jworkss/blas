@@ -370,13 +370,35 @@ main:focus {
   align-items: start;
   gap: 0.75rem 1.25rem;
 }
-.proceso svg {
+.proceso .diagrama-svg {
   grid-area: diagrama;
   width: 100%;
   height: auto;
-  background: var(--color-acento-suave);
-  border-radius: 16px;
   margin-top: 0.5rem;
+}
+.zona rect {
+  stroke-width: 2;
+}
+.zona-ui rect {
+  fill: #f0f0ff;
+  stroke: var(--color-primario);
+}
+.zona-rt rect {
+  fill: #fffaf0;
+  stroke: #d2aa39;
+}
+.zona-kb rect {
+  fill: #f2fbf5;
+  stroke: #58a67b;
+}
+.zona-adm rect {
+  fill: #fff5f5;
+  stroke: #dc8585;
+}
+.zona-titulo {
+  fill: var(--color-secundario);
+  font-size: 14px;
+  font-weight: 700;
 }
 .nodo rect {
   fill: #fff;
@@ -407,6 +429,9 @@ main:focus {
   font-size: 12.5px;
   font-weight: 700;
   fill: #2b2b3a;
+}
+.diagrama-svg.compacto .nodo text {
+  font-size: 14px;
 }
 .flujo {
   fill: none;
@@ -493,6 +518,13 @@ body.alto-contraste .nodo.on rect {
 body.alto-contraste .nodo text {
   fill: #fff;
 }
+body.alto-contraste .zona rect {
+  fill: #09183e;
+  stroke: #fff;
+}
+body.alto-contraste .zona-titulo {
+  fill: #ffd60a;
+}
 body.alto-contraste .flujo {
   stroke: #ffd60a;
 }
@@ -521,21 +553,24 @@ body.alto-contraste .saltar:focus {
   .hero .encabezado {
     padding-inline: 1rem;
   }
+  .barra #btn-contraste {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 900px) {
   .proceso {
     display: block;
-    overflow-x: auto;
+    overflow: visible;
+  }
+  .proceso .diagrama-svg {
+    display: block;
   }
   .paso-info {
     margin: 1rem 0;
   }
   .controles {
     margin-bottom: 1rem;
-  }
-  .proceso svg {
-    min-width: 720px;
-  }
-  .barra #btn-contraste {
-    margin-left: 0;
   }
 }
 
@@ -575,7 +610,8 @@ body.alto-contraste .saltar:focus {
   .proceso {
     overflow: visible;
   }
-  .proceso svg {
+  .proceso .diagrama-svg {
+    display: block;
     min-width: 0;
   }
   .paso-info {

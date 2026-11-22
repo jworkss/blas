@@ -1,26 +1,108 @@
 import { useEffect, useState } from "react";
 
-// Nodos del diagrama de la presentación: [x, y, texto, grupo]
+// Nodos del diagrama: [x, y, texto, grupo]
 const N = {
-  usuario: [20, 10, "Usuario del chat", "ui"],
-  interfaz: [250, 10, "Interfaz de chat", "ui"],
-  audio: [480, 10, "Audio generado", "ui"],
-  servidor: [20, 120, "Servidor HTTPS", "rt"],
-  voz: [250, 120, "Chat de voz", "rt"],
-  texto: [480, 120, "Chat de texto", "rt"],
-  cola: [710, 120, "Cola de solicitudes", "rt"],
-  cuentas: [20, 230, "Cuentas y acceso", "rt"],
-  herr: [250, 230, "Herramientas de voz", "rt"],
-  proc: [710, 230, "Procesamiento de consultas", "rt"],
-  bd: [20, 340, "Base de datos del chat", "kb"],
-  cont: [250, 340, "Contenido de conocimiento", "kb"],
-  kb: [480, 340, "Búsqueda (kb.js)", "kb"],
-  emb: [710, 340, "Embeddings (bge-m3)", "kb"],
-  certs: [20, 450, "Certificados TLS", "adm"],
-  csv: [250, 450, "Exportación CSV", "adm"],
+  usuario: [20, 35, "Usuario del chat", "ui"],
+  interfaz: [250, 35, "Interfaz de chat", "ui"],
+  audio: [480, 35, "Audio generado", "ui"],
+  servidor: [20, 145, "Servidor HTTPS", "rt"],
+  voz: [250, 145, "Chat de voz", "rt"],
+  texto: [480, 145, "Chat de texto", "rt"],
+  cola: [710, 145, "Cola de solicitudes", "rt"],
+  cuentas: [20, 225, "Cuentas y acceso", "rt"],
+  herr: [250, 225, "Herramientas de voz", "rt"],
+  proc: [710, 225, "Procesamiento de consultas", "rt"],
+  bd: [480, 360, "Base de datos del chat", "kb"],
+  cont: [710, 360, "Contenido de conocimiento", "kb"],
+  kb: [480, 430, "Búsqueda (kb.js)", "kb"],
+  emb: [710, 430, "Embeddings (bge-m3)", "kb"],
+  certs: [20, 360, "Certificados TLS", "adm"],
+  csv: [250, 360, "Exportación CSV", "adm"],
 };
-const W = 190, H = 54;
-const centro = (id) => [N[id][0] + W / 2, N[id][1] + H / 2];
+const W = 190;
+const H = 54;
+const W_COMPACTO = 180;
+const H_COMPACTO = 60;
+
+const N_COMPACTOS = {
+  usuario: [10, 50, N.usuario[2], "ui"],
+  interfaz: [210, 50, N.interfaz[2], "ui"],
+  audio: [10, 120, N.audio[2], "ui"],
+  servidor: [10, 240, N.servidor[2], "rt"],
+  cuentas: [210, 240, N.cuentas[2], "rt"],
+  voz: [10, 310, N.voz[2], "rt"],
+  texto: [210, 310, N.texto[2], "rt"],
+  herr: [10, 380, N.herr[2], "rt"],
+  cola: [210, 380, N.cola[2], "rt"],
+  proc: [210, 450, N.proc[2], "rt"],
+  bd: [10, 565, N.bd[2], "kb"],
+  cont: [210, 565, N.cont[2], "kb"],
+  kb: [10, 635, N.kb[2], "kb"],
+  emb: [210, 635, N.emb[2], "kb"],
+  certs: [10, 750, N.certs[2], "adm"],
+  csv: [210, 750, N.csv[2], "adm"],
+};
+
+const ZONAS = {
+  escritorio: [
+    { id: "ui", titulo: "Experiencia de usuario", x: 10, y: 10, ancho: 680, alto: 85 },
+    { id: "rt", titulo: "Tiempo de ejecución del asistente", x: 10, y: 110, ancho: 900, alto: 190 },
+    { id: "adm", titulo: "Administración", x: 10, y: 330, ancho: 440, alto: 110 },
+    { id: "kb", titulo: "Conocimientos y datos", x: 470, y: 330, ancho: 440, alto: 170 },
+  ],
+  compacto: [
+    { id: "ui", titulo: "Experiencia de usuario", x: 0, y: 10, ancho: 400, alto: 180 },
+    { id: "rt", titulo: "Tiempo de ejecución del asistente", x: 0, y: 200, ancho: 400, alto: 340 },
+    { id: "kb", titulo: "Conocimientos y datos", x: 0, y: 525, ancho: 400, alto: 175 },
+    { id: "adm", titulo: "Administración", x: 0, y: 710, ancho: 400, alto: 130 },
+  ],
+};
+
+const ETIQUETAS_COMPACTAS = {
+  usuario: ["Usuario del", "chat"],
+  interfaz: ["Interfaz de", "chat"],
+  audio: ["Audio generado"],
+  servidor: ["Servidor HTTPS"],
+  cuentas: ["Cuentas y", "acceso"],
+  voz: ["Chat de voz"],
+  texto: ["Chat de texto"],
+  herr: ["Herramientas", "de voz"],
+  cola: ["Cola de", "solicitudes"],
+  proc: ["Procesamiento de", "consultas"],
+  bd: ["Base de datos", "del chat"],
+  cont: ["Contenido de", "conocimiento"],
+  kb: ["Búsqueda", "(kb.js)"],
+  emb: ["Embeddings", "(bge-m3)"],
+  certs: ["Certificados TLS"],
+  csv: ["Exportación CSV"],
+};
+
+const DESVIOS_COMPACTOS = {
+  "herr>audio": (origen, destino) => [[200, origen[1]], [200, destino[1]]],
+  "proc>kb": (origen, destino) => [[200, origen[1]], [200, destino[1]]],
+  "kb>proc": (origen, destino) => [[200, origen[1]], [200, destino[1]]],
+  "bd>csv": (origen, destino) => [[200, origen[1]], [200, destino[1]]],
+};
+
+function centro(id, nodos, ancho, alto) {
+  return [nodos[id][0] + ancho / 2, nodos[id][1] + alto / 2];
+}
+
+function crearTrazo(ruta, nodos, ancho, alto, compacto) {
+  const puntos = [];
+  ruta.forEach((id, indice) => {
+    const actual = centro(id, nodos, ancho, alto);
+    if (indice > 0) {
+      const anterior = ruta[indice - 1];
+      const desvio = compacto && DESVIOS_COMPACTOS[`${anterior}>${id}`];
+      if (desvio) {
+        puntos.push(...desvio(centro(anterior, nodos, ancho, alto), actual));
+      }
+    }
+    puntos.push(actual);
+  });
+  return "M" + puntos.map((punto) => punto.join(",")).join(" L");
+}
 
 const PASOS = [
   { t: "1. La persona habla o escribe", d: "Desde la interfaz de chat, por voz o por texto. La página se sirve por HTTPS para poder usar el micrófono.", ruta: ["usuario", "interfaz"], on: ["usuario", "interfaz"] },
@@ -37,8 +119,16 @@ const PASOS = [
 
 export default function Proceso() {
   const reducir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [compacto, setCompacto] = useState(() => window.matchMedia("(max-width: 900px)").matches);
   const [paso, setPaso] = useState(0);
   const [auto, setAuto] = useState(!reducir);
+
+  useEffect(() => {
+    const consulta = window.matchMedia("(max-width: 900px)");
+    const actualizar = () => setCompacto(consulta.matches);
+    consulta.addEventListener("change", actualizar);
+    return () => consulta.removeEventListener("change", actualizar);
+  }, []);
 
   useEffect(() => {
     if (!auto) return;
@@ -47,7 +137,6 @@ export default function Proceso() {
   }, [auto]);
 
   const { t, d, ruta, on } = PASOS[paso];
-  const trazo = "M" + ruta.map((n) => centro(n).join(",")).join(" L");
   const mover = (delta) => {
     setAuto(false);
     setPaso((actual) => Math.max(0, Math.min(PASOS.length - 1, actual + delta)));
@@ -57,9 +146,20 @@ export default function Proceso() {
     setPaso(indice);
   };
 
+  const nodos = compacto ? N_COMPACTOS : N;
+  const anchoNodo = compacto ? W_COMPACTO : W;
+  const altoNodo = compacto ? H_COMPACTO : H;
+  const viewBox = compacto ? "0 0 400 850" : "0 0 920 520";
+  const trazo = crearTrazo(ruta, nodos, anchoNodo, altoNodo, compacto);
   return (
     <div className="proceso">
-      <svg viewBox="0 0 920 510" role="img" aria-label="Diagrama del recorrido de una consulta en Blas, de la persona al servidor, la búsqueda, el modelo y el audio">
+      <svg className={compacto ? "diagrama-svg compacto" : "diagrama-svg"} viewBox={viewBox} role="img" aria-label="Diagrama del recorrido de una consulta en Blas, de la persona al servidor, la búsqueda, el modelo y el audio">
+        {ZONAS[compacto ? "compacto" : "escritorio"].map((zona) => (
+          <g className={`zona zona-${zona.id}`} key={zona.id}>
+            <rect x={zona.x} y={zona.y} width={zona.ancho} height={zona.alto} rx="12" />
+            <text className="zona-titulo" x={zona.x + 14} y={zona.y + 23}>{zona.titulo}</text>
+          </g>
+        ))}
         <g key={paso}>
           <path d={trazo} className="flujo" />
           {!reducir && (
@@ -68,12 +168,19 @@ export default function Proceso() {
             </circle>
           )}
         </g>
-        {Object.entries(N).map(([id, [x, y, txt, grupo]]) => (
-          <g key={id} className={`nodo ${grupo} ${on.includes(id) ? "on" : ""}`}>
-            <rect x={x} y={y} width={W} height={H} rx="10" />
-            <text x={x + W / 2} y={y + H / 2 + 4} textAnchor="middle">{txt}</text>
-          </g>
-        ))}
+        {Object.entries(nodos).map(([id, [x, y, txt, grupo]]) => {
+          const lineas = compacto ? ETIQUETAS_COMPACTAS[id] || [txt] : [txt];
+          return (
+            <g key={id} className={`nodo ${grupo} ${on.includes(id) ? "on" : ""}`}>
+              <rect x={x} y={y} width={anchoNodo} height={altoNodo} rx="10" />
+              <text x={x + anchoNodo / 2} y={y + altoNodo / 2 - (lineas.length > 1 ? 7 : 0)} textAnchor="middle">
+                {lineas.map((linea, indice) => (
+                  <tspan key={linea} x={x + anchoNodo / 2} dy={indice === 0 ? 0 : 15}>{linea}</tspan>
+                ))}
+              </text>
+            </g>
+          );
+        })}
       </svg>
 
       <div className="paso-info" aria-live={auto ? "off" : "polite"}>

@@ -10,7 +10,7 @@
 
 ## Descripción del proyecto
 
-Blas es una propuesta de asistente virtual de voz y texto para ingresantes de la Universidad Nacional de Moreno. Está pensado para facilitar el acceso a información universitaria a personas con baja visión, ciegas y adultas mayores.
+Blas es una propuesta de asistente virtual de voz y texto para ingresantes de la Universidad Nacional de Moreno. Está pensado para facilitar el acceso a información universitaria a personas con discapacidad visual y adultas mayores.
 
 El proyecto propone responder consultas con información pública de la Universidad. La experiencia contempla interacción por voz y por texto, y busca ofrecer respuestas claras y accesibles. También se presentan las etapas operativas de una consulta y videos del proyecto en formatos vertical, cuadrado y horizontal, seleccionados según el ancho de pantalla.
 
