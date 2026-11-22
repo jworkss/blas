@@ -1,0 +1,20 @@
+[
+  {
+    "id": "vertical",
+    "formato": "Vertical",
+    "src": "videos/blas-vertical.mp4",
+    "maxWidth": 600
+  },
+  {
+    "id": "cuadrado",
+    "formato": "Cuadrado",
+    "src": "videos/blas-cuadrado.mp4",
+    "maxWidth": 900
+  },
+  {
+    "id": "horizontal",
+    "formato": "Horizontal",
+    "src": "videos/blas-horizontal.mp4",
+    "maxWidth": null
+  }
+]
