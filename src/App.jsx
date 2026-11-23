@@ -70,6 +70,7 @@ function VideoPagina() {
       <a href="#/">← Volver al inicio</a>
       <h1>Videos de Blas</h1>
       <p>El video se adapta al formato de pantalla: vertical, cuadrado u horizontal.</p>
+      <p>Tanto, las animaciones como el audio fueron creados desde las IA locales desarrolladas por el equipo de Blas.</p>
       <video
         className={`video-responsivo video-${video.id}`}
         key={video.src}
