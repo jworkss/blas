@@ -2,22 +2,22 @@ import { useEffect, useState } from "react";
 
 // Nodos del diagrama: [x, y, texto, grupo]
 const N = {
-  usuario: [20, 35, "Usuario del chat", "ui"],
-  interfaz: [250, 35, "Interfaz de chat", "ui"],
-  audio: [480, 35, "Audio generado", "ui"],
-  servidor: [20, 145, "Servidor HTTPS", "rt"],
-  voz: [250, 145, "Chat de voz", "rt"],
-  texto: [480, 145, "Chat de texto", "rt"],
-  cola: [710, 145, "Cola de solicitudes", "rt"],
-  cuentas: [20, 225, "Cuentas y acceso", "rt"],
-  herr: [250, 225, "Herramientas de voz", "rt"],
-  proc: [710, 225, "Procesamiento de consultas", "rt"],
-  bd: [480, 360, "Base de datos del chat", "kb"],
-  cont: [710, 360, "Contenido de conocimiento", "kb"],
-  kb: [480, 430, "Búsqueda (kb.js)", "kb"],
-  emb: [710, 430, "Embeddings (bge-m3)", "kb"],
-  certs: [20, 360, "Certificados TLS", "adm"],
-  csv: [250, 360, "Exportación CSV", "adm"],
+  usuario: [20, 50, "Usuario del chat", "ui"],
+  interfaz: [250, 50, "Interfaz de chat", "ui"],
+  audio: [480, 50, "Audio generado", "ui"],
+  servidor: [20, 174, "Servidor HTTPS", "rt"],
+  voz: [250, 174, "Chat de voz", "rt"],
+  texto: [480, 174, "Chat de texto", "rt"],
+  cola: [710, 174, "Cola de solicitudes", "rt"],
+  cuentas: [20, 248, "Cuentas y acceso", "rt"],
+  herr: [250, 248, "Herramientas de voz", "rt"],
+  proc: [710, 248, "Procesamiento de consultas", "rt"],
+  bd: [480, 372, "Base de datos del chat", "kb"],
+  cont: [710, 372, "Contenido de conocimiento", "kb"],
+  kb: [480, 446, "Búsqueda (kb.js)", "kb"],
+  emb: [710, 446, "Embeddings (bge-m3)", "kb"],
+  certs: [20, 372, "Certificados TLS", "adm"],
+  csv: [250, 372, "Exportación CSV", "adm"],
 };
 const W = 190;
 const H = 54;
@@ -27,34 +27,34 @@ const H_COMPACTO = 60;
 const N_COMPACTOS = {
   usuario: [10, 50, N.usuario[2], "ui"],
   interfaz: [210, 50, N.interfaz[2], "ui"],
-  audio: [10, 120, N.audio[2], "ui"],
-  servidor: [10, 240, N.servidor[2], "rt"],
-  cuentas: [210, 240, N.cuentas[2], "rt"],
-  voz: [10, 310, N.voz[2], "rt"],
-  texto: [210, 310, N.texto[2], "rt"],
-  herr: [10, 380, N.herr[2], "rt"],
-  cola: [210, 380, N.cola[2], "rt"],
-  proc: [210, 450, N.proc[2], "rt"],
-  bd: [10, 565, N.bd[2], "kb"],
-  cont: [210, 565, N.cont[2], "kb"],
-  kb: [10, 635, N.kb[2], "kb"],
-  emb: [210, 635, N.emb[2], "kb"],
-  certs: [10, 750, N.certs[2], "adm"],
-  csv: [210, 750, N.csv[2], "adm"],
+  audio: [10, 122, N.audio[2], "ui"],
+  servidor: [10, 250, N.servidor[2], "rt"],
+  cuentas: [210, 250, N.cuentas[2], "rt"],
+  voz: [10, 322, N.voz[2], "rt"],
+  texto: [210, 322, N.texto[2], "rt"],
+  herr: [10, 394, N.herr[2], "rt"],
+  cola: [210, 394, N.cola[2], "rt"],
+  proc: [210, 466, N.proc[2], "rt"],
+  bd: [10, 594, N.bd[2], "kb"],
+  cont: [210, 594, N.cont[2], "kb"],
+  kb: [10, 666, N.kb[2], "kb"],
+  emb: [210, 666, N.emb[2], "kb"],
+  certs: [10, 794, N.certs[2], "adm"],
+  csv: [210, 794, N.csv[2], "adm"],
 };
 
 const ZONAS = {
   escritorio: [
-    { id: "ui", titulo: "Experiencia de usuario", x: 10, y: 10, ancho: 680, alto: 85 },
-    { id: "rt", titulo: "Tiempo de ejecución del asistente", x: 10, y: 110, ancho: 900, alto: 190 },
-    { id: "adm", titulo: "Administración", x: 10, y: 330, ancho: 440, alto: 110 },
-    { id: "kb", titulo: "Conocimientos y datos", x: 470, y: 330, ancho: 440, alto: 170 },
+    { id: "ui", titulo: "Experiencia de usuario", x: 10, y: 10, ancho: 680, alto: 108 },
+    { id: "rt", titulo: "Tiempo de ejecución del asistente", x: 10, y: 134, ancho: 900, alto: 182 },
+    { id: "adm", titulo: "Administración", x: 10, y: 332, ancho: 440, alto: 108 },
+    { id: "kb", titulo: "Conocimientos y datos", x: 470, y: 332, ancho: 440, alto: 182 },
   ],
   compacto: [
-    { id: "ui", titulo: "Experiencia de usuario", x: 0, y: 10, ancho: 400, alto: 180 },
-    { id: "rt", titulo: "Tiempo de ejecución del asistente", x: 0, y: 200, ancho: 400, alto: 340 },
-    { id: "kb", titulo: "Conocimientos y datos", x: 0, y: 525, ancho: 400, alto: 175 },
-    { id: "adm", titulo: "Administración", x: 0, y: 710, ancho: 400, alto: 130 },
+    { id: "ui", titulo: "Experiencia de usuario", x: 0, y: 10, ancho: 400, alto: 186 },
+    { id: "rt", titulo: "Tiempo de ejecución del asistente", x: 0, y: 210, ancho: 400, alto: 330 },
+    { id: "kb", titulo: "Conocimientos y datos", x: 0, y: 554, ancho: 400, alto: 186 },
+    { id: "adm", titulo: "Administración", x: 0, y: 754, ancho: 400, alto: 114 },
   ],
 };
 
@@ -149,7 +149,7 @@ export default function Proceso() {
   const nodos = compacto ? N_COMPACTOS : N;
   const anchoNodo = compacto ? W_COMPACTO : W;
   const altoNodo = compacto ? H_COMPACTO : H;
-  const viewBox = compacto ? "0 0 400 850" : "0 0 920 520";
+  const viewBox = compacto ? "0 0 400 878" : "0 0 920 524";
   const trazo = crearTrazo(ruta, nodos, anchoNodo, altoNodo, compacto);
   return (
     <div className="proceso">
